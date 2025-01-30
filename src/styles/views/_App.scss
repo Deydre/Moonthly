@@ -1,0 +1,18 @@
+@use '../utils/variables.scss' as *;
+@use '../utils/mixins.scss' as *;
+
+* {
+    padding: 0px;
+    margin: 0px;
+    @include font-onest;
+}
+
+body {
+    color: $white;
+    background-color: $background-color;
+}
+
+h1 {
+    font-size: 2em;
+    font-weight: 900;
+}
