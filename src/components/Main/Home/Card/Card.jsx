@@ -1,7 +1,10 @@
-import React from "react";
-import { MdDelete } from "react-icons/md";
+import React, { useState } from "react";
+import AlertDialog from "../../../commons/AlertDialog/AlertDialog";
 
 const Card = ({ data }) => {
+
+  let [dialogIsOpen, setDialogIsOpen] = useState(false)
+
   return <>
     <article className="card" style={{ backgroundImage: `url(${data.img})` }}>
       <div className="textCard">
@@ -9,15 +12,12 @@ const Card = ({ data }) => {
           <div className="tag">
             <p>#{data.type}</p>
           </div>
-          <button className="btnSquare">
-            <MdDelete />
-          </button>
+            <AlertDialog />
         </div>
         <div>
           <h4>{data.title}</h4>
         </div>
       </div>
-
     </article>
   </>
 };
