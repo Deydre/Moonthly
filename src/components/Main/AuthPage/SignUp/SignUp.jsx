@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import HashLoader from "react-spinners/HashLoader";
+import { v4 as uuidv4 } from 'uuid';
 
 // Import Auth
 import { authentication } from "../../../../../firebase/firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+
+// Import firestore db
+import { db } from "../../../../../firebase/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 const SignUp = ({updateSignUp}) => {
 
@@ -60,11 +64,50 @@ const SignUp = ({updateSignUp}) => {
       const { user } = userCredential;
       // Updating that user with a username
       await updateProfile(user, { displayName: username });
+      // Waiting Firebase to update user's info
+      await authentication.currentUser.reload(); 
       console.log(`User created successfully: ${authentication.currentUser.displayName}`);
+      
+      // Media Examples for new user
+      const mediaExamples = [
+        {
+          title: "Portal (Example videogame)",
+          img: "https://assetsio.gnwcdn.com/co1x7d.jpg?width=1200&height=1200&fit=bounds&quality=70&format=jpg&auto=webp",
+          type: "videogame",
+        },
+        {
+          title: "Breaking Bad (Example series)",
+          img: "https://i.ebayimg.com/images/g/eKEAAOxyOMdS4U2W/s-l400.jpg",
+          type: "series",
+        },
+        {
+          title: "Queen (Example Music)",
+          img: "https://i.ebayimg.com/images/g/6CoAAOSwJoxch9GO/s-l1200.jpg",
+          type: "music",
+        },
+      ];
+
+
+      // Creating docs and collections for that user
+      await setDoc(doc(db, "users", user.uid), {});
+      for (const example of mediaExamples) {
+        const newUid = uuidv4();
+        await setDoc(doc(db, "users", user.uid, "media", newUid), {
+          date: new Date(),
+          uid: newUid,
+          ...example,
+        });
+      }
+
+      console.log(`Collections for new user created successfully`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 200); 
       updateSignUp(false);
-      setLoading(false);
     } catch (error) {
       console.log(error);
+    }finally {
+      setLoading(false);
     }
   };
 

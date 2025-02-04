@@ -1,6 +1,13 @@
+@use '../utils/variables.scss' as *;
+
 #cardsContainer {
-    background-color: red;
     display: flex;
-    
     gap: 20px;
+}
+
+#home {
+    background-color: $background-color;
+    border-radius: 18px;
+    padding: 40px;
+    min-height: 500px;
 }

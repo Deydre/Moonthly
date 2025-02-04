@@ -49,7 +49,7 @@ const Home = () => {
     return media.map((item, i) => <Card data={item} key={uuidv4()} />)
   }
 
-  return <div>
+  return <section id="home">
     
     {profile ? <>
       <h3>¡Bienvenid@, {profile.username}!</h3>
@@ -58,7 +58,7 @@ const Home = () => {
     }
     
 
-  </div>;
+  </section>;
 };
 
 export default Home;
