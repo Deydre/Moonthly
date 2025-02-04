@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import HashLoader from "react-spinners/HashLoader";
+import { v4 as uuidv4 } from 'uuid';
 
 // Import Auth
 import { authentication } from "../../../../../firebase/firebaseConfig";
@@ -8,7 +8,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 // Import firestore db
 import { db } from "../../../../../firebase/firebaseConfig";
-import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 const SignUp = ({updateSignUp}) => {
 
@@ -91,8 +91,10 @@ const SignUp = ({updateSignUp}) => {
       // Creating docs and collections for that user
       await setDoc(doc(db, "users", user.uid), {});
       for (const example of mediaExamples) {
-        await setDoc(doc(db, "users", user.uid, "media", example.title), {
+        const newUid = uuidv4();
+        await setDoc(doc(db, "users", user.uid, "media", newUid), {
           date: new Date(),
+          uid: newUid,
           ...example,
         });
       }
@@ -100,7 +102,7 @@ const SignUp = ({updateSignUp}) => {
       console.log(`Collections for new user created successfully`);
       setTimeout(() => {
         window.location.reload();
-      }, 500); 
+      }, 200); 
       updateSignUp(false);
     } catch (error) {
       console.log(error);

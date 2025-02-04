@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React, { useContext } from "react";
+import { context } from "../../../context/context";
+// Import MUI components
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -6,9 +8,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { MdDelete } from "react-icons/md";
+// Import firestore db
+import { db } from "../../../../firebase/firebaseConfig";
+import { doc, deleteDoc } from 'firebase/firestore';
 
-const AlertDialog = () => {
+
+const AlertDialog = ({ mediaUid }) => {
   const [open, setOpen] = React.useState(false);
+
+  const { profile } = useContext(context);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -18,11 +26,28 @@ const AlertDialog = () => {
     setOpen(false);
   };
 
+  const handleDeleteItem = async () => {
+    try {
+      // Users -> doc user -> media -> uid
+      const mediaRef = doc(db, "users", profile.uid, "media", mediaUid);
+
+      // Elimina el documento de media
+      await deleteDoc(mediaRef);
+      console.log('Media deleted successfully!');
+      setOpen(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting media: ", error);
+    }
+  };
+
+
+
   return (
     <React.Fragment>
-      <Button className="btnSquare" onClick={handleClickOpen}>
+      <button className="btnSquare" onClick={handleClickOpen}>
         <MdDelete />
-      </Button>
+      </button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -65,13 +90,13 @@ const AlertDialog = () => {
           },
           "& .MuiButton-root": {
             padding: "6px 16px",
-            borderRadius:"14px",
-            fontFamily: "'Onest', sans-serif", 
+            borderRadius: "14px",
+            fontFamily: "'Onest', sans-serif",
             fontWeight: "600",
-            color: "#fff", 
-            backgroundColor: "#FF77A9", 
+            color: "#fff",
+            backgroundColor: "#FF77A9",
             "&:hover": {
-              backgroundColor: "#FF4C75", 
+              backgroundColor: "#FF4C75",
             },
           }
         }}
@@ -81,15 +106,13 @@ const AlertDialog = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Changes can't' be undone once you accept
+            Changes can't be undone once you accept
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>CANCEL</Button>
-          <Button onClick={handleClose} autoFocus>
-
-            ACCEPT
-          </Button>
+          <Button
+            onClick={handleDeleteItem} autoFocus>ACCEPT</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

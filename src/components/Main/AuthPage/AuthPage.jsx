@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
-import HashLoader from "react-spinners/HashLoader";
+import React, { useState } from "react";
 import Login from "./Login/Login";
 import SignUp from "./SignUp/SignUp";
 
