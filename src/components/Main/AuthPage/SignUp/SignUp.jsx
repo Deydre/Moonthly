@@ -6,6 +6,10 @@ import HashLoader from "react-spinners/HashLoader";
 import { authentication } from "../../../../../firebase/firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
+// Import firestore db
+import { db } from "../../../../../firebase/firebaseConfig";
+import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
+
 const SignUp = ({updateSignUp}) => {
 
   const [loading, setLoading] = useState(false);
@@ -60,11 +64,48 @@ const SignUp = ({updateSignUp}) => {
       const { user } = userCredential;
       // Updating that user with a username
       await updateProfile(user, { displayName: username });
+      // Waiting Firebase to update user's info
+      await authentication.currentUser.reload(); 
       console.log(`User created successfully: ${authentication.currentUser.displayName}`);
+      
+      // Media Examples for new user
+      const mediaExamples = [
+        {
+          title: "Portal (Example videogame)",
+          img: "https://assetsio.gnwcdn.com/co1x7d.jpg?width=1200&height=1200&fit=bounds&quality=70&format=jpg&auto=webp",
+          type: "videogame",
+        },
+        {
+          title: "Breaking Bad (Example series)",
+          img: "https://i.ebayimg.com/images/g/eKEAAOxyOMdS4U2W/s-l400.jpg",
+          type: "series",
+        },
+        {
+          title: "Queen (Example Music)",
+          img: "https://i.ebayimg.com/images/g/6CoAAOSwJoxch9GO/s-l1200.jpg",
+          type: "music",
+        },
+      ];
+
+
+      // Creating docs and collections for that user
+      await setDoc(doc(db, "users", user.uid), {});
+      for (const example of mediaExamples) {
+        await setDoc(doc(db, "users", user.uid, "media", example.title), {
+          date: new Date(),
+          ...example,
+        });
+      }
+
+      console.log(`Collections for new user created successfully`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 500); 
       updateSignUp(false);
-      setLoading(false);
     } catch (error) {
       console.log(error);
+    }finally {
+      setLoading(false);
     }
   };
 

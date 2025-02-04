@@ -1,9 +1,42 @@
-.card {
-    background-color: blue;
+@use '../utils/variables.scss' as *;
 
-    img {
-        width: auto;
-        height: 200px;
-        display: block
+.card {
+    background-color: $white-soft;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 130px;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+
+    .textCard {
+        background: $black-soft;
+        color: $white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        gap: 10px;
+        // opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+
+        h4 {
+            padding: 8px;
+        }
     }
+
+    &:hover .textCard {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .infoDiv {
+        padding: 8px 0px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
 }
