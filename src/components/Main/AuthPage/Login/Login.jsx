@@ -4,7 +4,7 @@ import HashLoader from "react-spinners/HashLoader";
 
 // Import Auth
 import { authentication } from "../../../../../firebase/firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const Login = ({ updateSignUp }) => {
   const { updateProfile } = useContext(context);
@@ -59,6 +59,27 @@ const Login = ({ updateSignUp }) => {
     updateSignUp(true);
   }
 
+  // Google Auth
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(authentication, provider);
+      const user = result.user;
+      console.log("Usuario autenticado con Google:", user);
+      updateProfile({
+        username: user.displayName,
+        uid: user.uid,
+      });
+    } catch (error) {
+      console.log("Error en la autenticación con Google:", error);
+      setMessage("Error al iniciar sesión con Google");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
 
   return <div className="login">
     {loading ? (
@@ -78,6 +99,9 @@ const Login = ({ updateSignUp }) => {
             <h6>{message}</h6>
           </div>
         </article>
+        <div>
+              <button onClick={handleGoogleSignIn}>Sign in with Google</button>
+            </div>
         <article id="divToSignUp">
           <button onClick={handleChangeToSignUp}>No account? Sign Up!</button>
         </article>
