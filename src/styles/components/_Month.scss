@@ -1,0 +1,33 @@
+@use '../utils/variables.scss' as *;
+
+.month {
+    // border: 2px solid $white-soft;
+    border-radius: 8px;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    #cardsContainer {
+       display: flex;
+       flex-direction:row;
+       flex-wrap: wrap;
+       gap: 20px;
+    }
+}
+
+.winter {
+    background: $gradient-winter;
+}
+
+.spring {
+    background: $gradient-spring;
+}
+
+.summer {
+    background: $gradient-summer;
+}
+
+.autumn {
+    background: $gradient-autumn;
+}

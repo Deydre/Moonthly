@@ -1,7 +1,14 @@
 $background-color: #302a3c;
 $white: #fff;
 $white-soft: #ffffff24;
-$black: linear-gradient(160deg, #ffa2aa,#b1ffb7,#f5f593);
+$gradient-winter: linear-gradient(160deg, #00ffea18, rgba(226, 192, 218, 0.0),);
+$gradient-spring: linear-gradient(160deg, #37ff0018, rgba(226, 192, 218, 0.0),);
+$gradient-summer: linear-gradient(160deg, #ffe92518, rgba(226, 192, 218, 0.0),);
+$gradient-autumn: linear-gradient(160deg, #ff9d0918, rgba(226, 192, 218, 0.0),);
+$gradient: linear-gradient(160deg, #ffa2aa,#b1ffb7,#f5f593);
+$gradient-secondary: linear-gradient(160deg, #ffa2aa,#f5f593);
 $black-soft: rgba(32, 31, 36, 0.7);
+$pink:#FF4C75;
+$pink-soft: #FF77A9;
 
 $ipad-breakpoint: 768px;

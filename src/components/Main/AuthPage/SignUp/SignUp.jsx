@@ -4,13 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Import Auth
 import { authentication } from "../../../../../firebase/firebaseConfig";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 // Import firestore db
 import { db } from "../../../../../firebase/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 
-const SignUp = ({updateSignUp}) => {
+const SignUp = ({ updateSignUp }) => {
 
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +23,7 @@ const SignUp = ({updateSignUp}) => {
   const [passwordMessage, setPasswordMessage] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
 
-// Validation
+  // Validation
   useEffect(() => {
     if (username.length < 0) {
       setUsernameMessage("Please enter a username");
@@ -54,6 +54,24 @@ const SignUp = ({updateSignUp}) => {
   const handleUsername = (e) => setUsername(e.target.value);
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
+  // Media Examples for new user
+  const mediaExamples = [
+    {
+      title: "Portal (Example videogame)",
+      img: "https://assetsio.gnwcdn.com/co1x7d.jpg?width=1200&height=1200&fit=bounds&quality=70&format=jpg&auto=webp",
+      type: "videogame",
+    },
+    {
+      title: "Breaking Bad (Example series)",
+      img: "https://i.ebayimg.com/images/g/eKEAAOxyOMdS4U2W/s-l400.jpg",
+      type: "series",
+    },
+    {
+      title: "Queen (Example Music)",
+      img: "https://i.ebayimg.com/images/g/6CoAAOSwJoxch9GO/s-l1200.jpg",
+      type: "music",
+    },
+  ];
 
   const handleRegister = async () => {
     setLoading(true);
@@ -65,28 +83,8 @@ const SignUp = ({updateSignUp}) => {
       // Updating that user with a username
       await updateProfile(user, { displayName: username });
       // Waiting Firebase to update user's info
-      await authentication.currentUser.reload(); 
+      await authentication.currentUser.reload();
       console.log(`User created successfully: ${authentication.currentUser.displayName}`);
-      
-      // Media Examples for new user
-      const mediaExamples = [
-        {
-          title: "Portal (Example videogame)",
-          img: "https://assetsio.gnwcdn.com/co1x7d.jpg?width=1200&height=1200&fit=bounds&quality=70&format=jpg&auto=webp",
-          type: "videogame",
-        },
-        {
-          title: "Breaking Bad (Example series)",
-          img: "https://i.ebayimg.com/images/g/eKEAAOxyOMdS4U2W/s-l400.jpg",
-          type: "series",
-        },
-        {
-          title: "Queen (Example Music)",
-          img: "https://i.ebayimg.com/images/g/6CoAAOSwJoxch9GO/s-l1200.jpg",
-          type: "music",
-        },
-      ];
-
 
       // Creating docs and collections for that user
       await setDoc(doc(db, "users", user.uid), {});
@@ -102,11 +100,43 @@ const SignUp = ({updateSignUp}) => {
       console.log(`Collections for new user created successfully`);
       setTimeout(() => {
         window.location.reload();
-      }, 200); 
+      }, 200);
       updateSignUp(false);
     } catch (error) {
       console.log(error);
-    }finally {
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Google Auth
+  const handleGoogleRegister = async () => {
+    setLoading(true);
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(authentication, provider);
+      const user = result.user;
+      console.log("Usuario autenticado con Google:", user);
+
+      // Creating docs and collections for that user
+      await setDoc(doc(db, "users", user.uid), {});
+      for (const example of mediaExamples) {
+        const newUid = uuidv4();
+        await setDoc(doc(db, "users", user.uid, "media", newUid), {
+          date: new Date(),
+          uid: newUid,
+          ...example,
+        });
+      }
+
+      console.log(`Collections for new user created successfully`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
+      updateSignUp(false);
+    } catch (error) {
+      console.error("Error en la autenticación con Google:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -134,9 +164,14 @@ const SignUp = ({updateSignUp}) => {
       </div>
       {loading ? (<HashLoader color="#fff" />) : ""}
     </article>
+    <div>
+      <button onClick={handleGoogleRegister}>
+        Iniciar sesión con Google
+      </button>
+    </div>
     <article id="divToSignUp">
-          <button onClick={handleChangeToLogin}>Back to Login</button>
-        </article>
+      <button onClick={handleChangeToLogin}>Back to Login</button>
+    </article>
 
   </div>;
 
