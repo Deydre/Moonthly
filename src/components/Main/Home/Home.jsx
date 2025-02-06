@@ -13,13 +13,16 @@ const Home = () => {
 
   // Loop through array of media and painting items into cards
   const renderMonths = () => {
-    return months.map((month, i) => <Month monthName={month} key={uuidv4()} />)
+    return months.map((month, i) => {
+      const monthNumber = (i + 1).toString().padStart(2, "0");
+      return <Month monthName={month} monthNumber={monthNumber} key={uuidv4()} />;
+    });
   }
 
   return <section id="home">
 
     {profile ? <>
-      <h3>¡Bienvenid@, {profile.username}!</h3>
+      {/* <h3>¡Bienvenid@, {profile.username}!</h3> */}
       {renderMonths()}
     </> : <p>Cargando.....</p> // ⚡ CARGANDO...
     }

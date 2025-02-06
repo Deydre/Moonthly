@@ -1,13 +1,11 @@
 @use '../utils/variables.scss' as *;
 
-#cardsContainer {
-    display: flex;
-    gap: 20px;
-}
-
 #home {
-    background-color: $background-color;
+    // background-color: $background-color;
     border-radius: 18px;
     padding: 40px;
     min-height: 500px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
 }
