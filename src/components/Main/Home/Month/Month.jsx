@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { context } from "../../../../context/context";
 
-import Card from "../Card/Card";
+import Card from "./Card/Card";
+import CardAdd from "./CardAdd";
 import { v4 as uuidv4 } from 'uuid';
 
 // db
@@ -103,6 +104,7 @@ const Month = ({ monthName, monthNumber }) => {
     <h3>{monthName}</h3>
     <div id="cardsContainer">
       {renderCards()}
+      <CardAdd />
     </div>
 
   </section>;
