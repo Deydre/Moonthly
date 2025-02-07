@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IoIosAdd } from "react-icons/io";
-import NewCardDialog from "../../../../commons/newCardDialog";
+import NewCardDialog from "../../../../commons/newCardDialog/NewCardDialog";
 
 const CardAdd = ({ monthNumber }) => {
   const [open, setOpen] = useState(false);
