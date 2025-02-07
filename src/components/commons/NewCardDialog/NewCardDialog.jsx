@@ -13,34 +13,44 @@ import { db } from "../../../../firebase/firebaseConfig";
 import { doc, setDoc } from 'firebase/firestore';
 
 
-const NewCardDialog = ({ open, handleClose }) => {
-
+const NewCardDialog = ({ open, handleClose, monthNumber }) => {
   const { profile } = useContext(context);
 
-  const formatDate = (date) => {
-    return new Intl.DateTimeFormat('es-ES', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    }).format(date);
-  };
+  // Get actual month and format it 
+  const formatDatePart = (part) => part < 10 ? `0${part}` : part;
+
+  let actualMonth = new Date().getUTCMonth() + 1;
+  let actualDay = new Date().getUTCDate();
+
+  let formattedActualMonth = formatDatePart(actualMonth);
+  let formattedActualDay = formatDatePart(actualDay);
+
+  // If the current month matches the month the user wants to add a new item for, set the current date in the date input
+  const getDate = () => {
+    return monthNumber === formattedActualMonth
+      ? `2025-${monthNumber}-${formattedActualDay}`
+      : `2025-${monthNumber}-01`
+  }
 
   const [formData, setFormData] = useState({
     type: "book",
     title: "",
     imageUrl: "",
-    date: new Date().toISOString().split('T')[0]
+    date: getDate(),
   });
+
+
 
   const handleCreateItem = async (e) => {
     try {
       e.preventDefault();
       e.stopPropagation();
+
       // Creating the media item for that user
       await setDoc(doc(db, "users", profile.uid), {});
       const newUid = uuidv4();
       await setDoc(doc(db, "users", profile.uid, "media", newUid), {
-        date: formatDate(formData.date),
+        date: new Date(formData.date),
         uid: newUid,
         title: formData.title,
         img: formData.imageUrl,
@@ -56,7 +66,8 @@ const NewCardDialog = ({ open, handleClose }) => {
 
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+    console.log(formData.date)
   };
 
   return (
@@ -106,7 +117,7 @@ const NewCardDialog = ({ open, handleClose }) => {
 
             <label htmlFor="imageUrl"> Image URL: </label>
             <input id="imageUrl" type="url" name="imageUrl" value={formData.imageUrl} onChange={handleChange} required />
-            
+
             <label htmlFor="date"> Date: </label>
             <input id="date" type="date" name="date" value={formData.date} onChange={handleChange} required />
 

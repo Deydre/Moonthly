@@ -59,7 +59,7 @@ Moonthly focuses on representing your engagement over time. For example:
 - ✏️ **Activity management**
     - [x] When a user creates a new account, a record is created in Firestore with their UID, and some example items are associated with their account
     - [x] Allow users to delete items one by one
-    - [ ] Allow users to create items one by one*
+    - [X] Allow users to create items one by one
     - [ ] Allow users to edit items one by one*
 
     *Currently, items are created and edited manually from Firestore
@@ -76,6 +76,7 @@ Moonthly focuses on representing your engagement over time. For example:
     - [x] Choose fonts and color palette
     - [ ] Welcome the user when is logged
     - [ ] Pulish UI once structure is finished
+    - [X] When a user is creating a new item, set the default date to the 1st of the selected month unless it's the current month, in which case set the default date to the current day.
 
 - 📱 **Responsive design**
     - [ ] Responsive design for tablets

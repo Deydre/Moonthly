@@ -99,7 +99,7 @@ const Month = ({ monthName, monthNumber }) => {
     <h3>{monthName}</h3>
     <div id="cardsContainer">
       {renderCards()}
-      <CardAdd />
+      <CardAdd monthNumber={ monthNumber } />
     </div>
 
   </section>;
