@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AlertDialog from "../../../commons/AlertDialog/AlertDialog";
+import AlertDialog from "../../../../commons/AlertDialog/AlertDialog";
 
 const Card = ({ data }) => {
 

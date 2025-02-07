@@ -108,15 +108,18 @@ const SignUp = ({ updateSignUp }) => {
       setLoading(false);
     }
   };
-  
+
   // Google Auth
   const handleGoogleRegister = async () => {
     setLoading(true);
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(authentication, provider);
-      const user = result.user;
-      console.log("Usuario autenticado con Google:", user);
+      const userCredential = await signInWithPopup(authentication, provider);
+      const { user } = userCredential;
+      console.log(user.uid)
+      // Waiting Firebase to update user's info
+      await authentication.currentUser.reload();
+      console.log(`User created successfully: ${authentication.currentUser.displayName}`);
 
       // Creating docs and collections for that user
       await setDoc(doc(db, "users", user.uid), {});
