@@ -61,11 +61,6 @@ const Month = ({ monthName, monthNumber }) => {
     getData();
   }, [profile])
 
-  // // Loop through the array of media and render the items as cards for each month
-  // const renderCards = () => {
-  //   return media.map((item, i) => <Card data={item} key={uuidv4()} />)
-  // }
-
   // Loop through the array of media and render the items as cards for each month
   const renderCards = () => {
     return media
