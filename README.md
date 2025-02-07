@@ -81,6 +81,9 @@ Moonthly focuses on representing your engagement over time. For example:
     - [ ] Responsive design for tablets
     - [ ] Responsive design for mobiles
 
+- ⚠️ **Some issues to fix**
+    - [ ] Sign-up and login processes using Google Auth conflict with each other when creating documents in Firestore
+
 - 🚀 **In the future**
     - [ ] Month and anual statictics
     - [ ] Allow users to share their activity statistics
